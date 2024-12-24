@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 
-// [DIFFICULTY_CARDS 객체는 동일하게 유지]
+const DIFFICULTY_CARDS = {
+  '3x4': [
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭',
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭'
+  ],
+  '4x4': [
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭', '🎨', '🎪',
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭', '🎨', '🎪'
+  ],
+  '5x4': [
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭', '🎨', '🎪', '🎡', '🎢',
+    '🌸', '🌟', '🎀', '🦄', '🌈', '🍭', '🎨', '🎪', '🎡', '🎢'
+  ]
+};
 
 const Card = ({ isFlipped, children, onClick }) => {
   return (
@@ -47,7 +60,57 @@ const DifficultySelector = ({ difficulty, onSelect }) => (
 );
 
 const MemoryGame = () => {
-  // [상태 관리 코드는 동일하게 유지]
+  const [difficulty, setDifficulty] = useState('3x4');
+  const [cards, setCards] = useState([]);
+  const [flipped, setFlipped] = useState([]);
+  const [matched, setMatched] = useState([]);
+  const [moves, setMoves] = useState(0);
+  const [bestScores, setBestScores] = useState({
+    '3x4': Infinity,
+    '4x4': Infinity,
+    '5x4': Infinity
+  });
+
+  const shuffleCards = () => {
+    const shuffled = [...DIFFICULTY_CARDS[difficulty]]
+      .sort(() => Math.random() - 0.5)
+      .map((card, index) => ({ id: index, content: card }));
+    setCards(shuffled);
+    setFlipped([]);
+    setMatched([]);
+    setMoves(0);
+  };
+
+  useEffect(() => {
+    shuffleCards();
+  }, [difficulty]);
+
+  const handleCardClick = (id) => {
+    if (flipped.length === 2 || flipped.includes(id) || matched.includes(id)) return;
+
+    setFlipped([...flipped, id]);
+    
+    if (flipped.length === 1) {
+      setMoves(m => m + 1);
+      const firstCard = cards[flipped[0]];
+      const secondCard = cards[id];
+      
+      if (firstCard.content === secondCard.content) {
+        const newMatched = [...matched, flipped[0], id];
+        setMatched(newMatched);
+        setFlipped([]);
+        
+        if (newMatched.length === cards.length) {
+          setBestScores(prev => ({
+            ...prev,
+            [difficulty]: Math.min(prev[difficulty], moves + 1)
+          }));
+        }
+      } else {
+        setTimeout(() => setFlipped([]), 1000);
+      }
+    }
+  };
 
   return (
     <div className="w-full max-w-sm mx-auto">
