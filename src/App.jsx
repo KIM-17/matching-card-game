@@ -42,7 +42,7 @@ const Card = ({ isFlipped, children, onClick }) => {
 };
 
 const DifficultySelector = ({ difficulty, onSelect }) => (
-  <div className="flex gap-2 justify-center px-4">
+  <div className="flex gap-2 justify-center">
     {Object.keys(DIFFICULTY_CARDS).map((level) => (
       <button
         key={level}
@@ -113,7 +113,7 @@ const MemoryGame = () => {
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="flex-1 w-full">
       <h1 className="text-3xl font-medium text-pink-500 mb-6 text-center">
         귀여운 기억력 게임
       </h1>
@@ -134,26 +134,28 @@ const MemoryGame = () => {
         </button>
       </div>
 
-      <div 
-        className={`grid gap-2 w-full ${
-          difficulty === '3x4' ? 'grid-cols-3' :
-          difficulty === '4x4' ? 'grid-cols-4' :
-          'grid-cols-5'
-        }`}
-      >
-        {cards.map((card) => (
-          <Card
-            key={card.id}
-            isFlipped={flipped.includes(card.id) || matched.includes(card.id)}
-            onClick={() => handleCardClick(card.id)}
-          >
-            {card.content}
-          </Card>
-        ))}
+      <div className="max-w-[95vw] mx-auto">
+        <div 
+          className={`grid gap-2 w-full ${
+            difficulty === '3x4' ? 'grid-cols-3' :
+            difficulty === '4x4' ? 'grid-cols-4' :
+            'grid-cols-5'
+          }`}
+        >
+          {cards.map((card) => (
+            <Card
+              key={card.id}
+              isFlipped={flipped.includes(card.id) || matched.includes(card.id)}
+              onClick={() => handleCardClick(card.id)}
+            >
+              {card.content}
+            </Card>
+          ))}
+        </div>
       </div>
 
       {matched.length === cards.length && (
-        <div className="mt-6 p-4 bg-pink-100 rounded-xl text-center">
+        <div className="mt-6 p-4 bg-pink-100 rounded-xl text-center mx-4">
           <p className="text-2xl font-bold text-pink-600">
             🎉 축하합니다! 🎉
           </p>
@@ -173,7 +175,7 @@ const MemoryGame = () => {
 
 const App = () => {
   return (
-    <div className="min-h-screen w-full bg-pink-50 py-8 flex justify-center">
+    <div className="min-h-screen w-full bg-pink-50 py-8 px-4 flex">
       <MemoryGame />
     </div>
   );
