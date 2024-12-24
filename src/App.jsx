@@ -113,7 +113,7 @@ const MemoryGame = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto px-4">
+    <div className="w-full px-4">
       <h1 className="text-3xl font-medium text-pink-500 mb-6 text-center">
         귀여운 기억력 게임
       </h1>
@@ -173,7 +173,7 @@ const MemoryGame = () => {
 
 const App = () => {
   return (
-    <div className="min-h-screen w-full bg-pink-50 py-8">
+    <div className="min-h-screen w-full bg-pink-50 py-8 flex justify-center">
       <MemoryGame />
     </div>
   );
