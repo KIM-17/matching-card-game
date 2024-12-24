@@ -16,12 +16,6 @@ const DIFFICULTY_CARDS = {
   ]
 };
 
-const DIFFICULTY_LABELS = {
-  '3x4': '3 x 4',
-  '4x4': '4 x 4',
-  '5x4': '5 x 4'
-};
-
 const Card = ({ isFlipped, children, onClick }) => {
   return (
     <button
@@ -31,14 +25,14 @@ const Card = ({ isFlipped, children, onClick }) => {
       <div
         className={`absolute inset-0 bg-pink-100 flex items-center justify-center rounded-xl border-2 border-pink-200 ${
           isFlipped ? 'opacity-0' : 'opacity-100'
-        }`}
+        } transition-opacity duration-300`}
       >
         <span className="text-pink-400 text-4xl font-bold">?</span>
       </div>
       <div
         className={`absolute inset-0 bg-white flex items-center justify-center ${
           isFlipped ? 'opacity-100' : 'opacity-0'
-        }`}
+        } transition-opacity duration-300`}
       >
         <span className="text-5xl">{children}</span>
       </div>
@@ -47,18 +41,18 @@ const Card = ({ isFlipped, children, onClick }) => {
 };
 
 const DifficultySelector = ({ difficulty, onSelect }) => (
-  <div className="flex gap-8 justify-center">
-    {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => (
+  <div className="flex gap-4 justify-center">
+    {Object.keys(DIFFICULTY_CARDS).map((level) => (
       <button
-        key={key}
-        onClick={() => onSelect(key)}
-        className={`px-4 py-2 transition-all ${
-          difficulty === key 
-            ? 'text-pink-500 border-b-2 border-pink-500 font-medium' 
-            : 'text-pink-300 hover:text-pink-400'
+        key={level}
+        onClick={() => onSelect(level)}
+        className={`px-6 py-2 rounded-xl transition-all ${
+          difficulty === level 
+            ? 'bg-pink-100 text-pink-500 font-medium border-2 border-pink-300' 
+            : 'bg-white text-pink-400 border-2 border-pink-200 hover:border-pink-300'
         }`}
       >
-        {label}
+        {level}
       </button>
     ))}
   </div>
@@ -118,20 +112,20 @@ const MemoryGame = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-2xl mx-auto">
       <h1 className="text-3xl font-medium text-pink-500 mb-8 text-center">
         귀여운 기억력 게임
       </h1>
       
       <DifficultySelector difficulty={difficulty} onSelect={setDifficulty} />
       
-      <div className="flex flex-col items-center gap-4 mt-12 mb-8">
+      <div className="flex flex-col items-center gap-4 mt-8 mb-8">
         <div className="text-pink-500">
           최고 기록: <span className="font-semibold">{bestScores[difficulty] === Infinity ? '도전해보세요!' : `${bestScores[difficulty]}번`}</span>
         </div>
         <button 
           onClick={shuffleCards}
-          className="flex items-center gap-2 bg-pink-500 text-white px-6 py-3 rounded-2xl"
+          className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-pink-400 text-white px-8 py-3 rounded-2xl hover:from-pink-600 hover:to-pink-500 transition-colors shadow-lg font-medium text-lg"
         >
           <Sparkles className="w-5 h-5" />
           {matched.length > 0 ? '다시 시작' : '게임 시작'}
@@ -175,10 +169,8 @@ const MemoryGame = () => {
 
 const App = () => {
   return (
-    <div className="min-h-screen w-full bg-pink-50 px-4">
-      <div className="w-full py-8">
-        <MemoryGame />
-      </div>
+    <div className="min-h-screen w-full bg-pink-50 px-4 py-8">
+      <MemoryGame />
     </div>
   );
 };
